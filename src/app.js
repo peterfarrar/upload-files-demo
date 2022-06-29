@@ -1,8 +1,8 @@
 const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
-const multer  = require('multer')
-const nodepath = require('node:path')
+const multer = require('multer')
+const path = require('path')
 const { port } = require('../options')
 
 const app = express()
@@ -14,23 +14,23 @@ app.set('views', './src/views')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use(express.static(nodepath.join(__dirname, '../public')))
+app.use(express.static(path.join(__dirname, '../public')))
 
 app.get('/ping', (_req, res) => {
-  res.send("pong")
+  res.send('pong')
 })
 
 app.get('/', (req, res) => {
-  res.render("index")
+  res.render('index')
 })
 
-app.post('/upload', upload.single('pic'), (req, res, next) => {
+app.post('/upload', upload.single('pic'), (req, res) => {
   const { file } = req
-  const { originalname, path } = file
-  const pathParts = path.split(nodepath.sep)
+  const { originalname: originalName, path: uploadedPath } = file
+  const pathParts = uploadedPath.split(path.sep)
   pathParts.pop()
-  pathParts.push(originalname)
-  fs.rename(path, pathParts.join(nodepath.sep), () => {
+  pathParts.push(originalName)
+  fs.rename(uploadedPath, pathParts.join(path.sep), () => {
     res.render('index')
   })
 })
