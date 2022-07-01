@@ -1,8 +1,8 @@
 const fs = require('fs')
+const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const multer = require('multer')
-const path = require('path')
 const { port } = require('../options')
 
 const app = express()
@@ -31,7 +31,7 @@ app.post('/upload', upload.single('pic'), (req, res) => {
   pathParts.pop()
   pathParts.push(originalName)
   fs.rename(uploadedPath, pathParts.join(path.sep), () => {
-    res.render('index')
+    res.redirect('/')
   })
 })
 
